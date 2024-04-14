@@ -1,25 +1,18 @@
 import java.util.Scanner;
 public class RealEstate {
-	private City[] cities = new City[]{
-			new City("Tel-Aviv"),
-			new City("Ashkelon"),
-			new City("Holon"),
-			new City("Eilat"),
-			new City("Tiberias"),
-			new City("Kiryat-Shmona"),
-			new City("Beer-Sheva"),
-			new City("Ashdod"),
-			new City("Be'er-Ya'akov"),
-			new City("Ramat-Gan")
-	};
+
+	private City[] cities;
 	private User[] users;
 	private Property[] properties;
-	public final int LENGTH_PHONE = 10;
+
+	public static final int LENGTH_PHONE = 10;
 	public static final int CHOICE_SIGN_UP = 1;
 	public static final int CHOICE_LOGIN = 2;
 	public static final int CHOICE_EXIT = 3;
 	public static final int LOG_OUT = 6;
 	public static Scanner s = new Scanner(System.in);
+
+	//O(n)
 	public void addUser(User user) {
 		User[] temp = new User[this.users.length + 1];
 		for (int i = 0; i < this.users.length; i++) {
@@ -28,6 +21,7 @@ public class RealEstate {
 		temp[temp.length - 1] = user;
 		this.users = temp;
 	}
+	//O(1)
 	public void mainMenu() {
 		System.out.println("|Welcome to the menu|");
 		System.out.println("Please select the desired option:");
@@ -36,6 +30,7 @@ public class RealEstate {
 				2 - Log in to existing account
 				3 - Finish the program\s""");
 	}
+	//O(1)
 	public void menuUserLogin() {
 		System.out.println("""
 				|Are you interested|-->
@@ -46,9 +41,22 @@ public class RealEstate {
 				5 - Search for a property by parameters
 				6 - Log out and return to the main menu\s""");
 	}
+	//O(n)
 	public RealEstate() {
 		properties = new Property[0];
 
+		cities = new City[]{
+				new City("Tel-Aviv"),
+				new City("Holon"),
+				new City("Ashkelon"),
+				new City("Eilat"),
+				new City("Tiberias"),
+				new City("Kiryat-Shmona"),
+				new City("Beer-Sheva"),
+				new City("Ashdod"),
+				new City("Be'er-Ya'akov"),
+				new City("Ramat-Gan")
+		};
 		Street[] streets ={
 				new Street(Street.streetsList[0]),
 				new Street(Street.streetsList[1]),
@@ -63,6 +71,7 @@ public class RealEstate {
 				new Street(Street.streetsList[10]),
 				new Street(Street.streetsList[11])
 		};
+
 		for (int i : new int[]{1, 2, 3,}) {
 			cities[0].addStreets(streets[i]);
 		}
@@ -70,7 +79,6 @@ public class RealEstate {
 		for (int i : new int[]{3, 4, 5,}) {
 			cities[1].addStreets(streets[i]);
 		}
-
 		for (int i : new int[]{5, 6, 7,}) {
 			cities[2].addStreets(streets[i]);
 		}
@@ -180,8 +188,8 @@ public class RealEstate {
 		}
 		System.out.println("|GOOD BYE|");
 	}
+	//O(n)
 	private User signUp() {
-
 		String username = null;
 		do {
 			System.out.println("Enter a username: ");
@@ -219,6 +227,7 @@ public class RealEstate {
 		System.out.println("You have successfully entered a new user");
 		return newUser;
 	}
+	//O(n)
 	public User login() {
 		System.out.println("Enter a username: ");
 		String username = s.next();
@@ -233,6 +242,7 @@ public class RealEstate {
 		}
 		return found;
 	}
+	//O(n)
 	public boolean isAvailableUserName(String username) {
 		boolean available = true;
 		for (int i = 0; i < this.users.length; i++) {
@@ -243,6 +253,7 @@ public class RealEstate {
 		}
 		return available;
 	}
+	//O(n)
 	public boolean checkIfPasswordContainCharacter(String password) {
 		boolean res = false;
 		final String[] CHARS = {"_", "$", "%"};
@@ -254,6 +265,7 @@ public class RealEstate {
 		}
 		return res;
 	}
+	//O(n)
 	public boolean checkIfPasswordContainDigits(String password) {
 		boolean res = false;
 		for (int i = 0; i < password.length(); i++) {
@@ -266,6 +278,7 @@ public class RealEstate {
 		}
 		return res;
 	}
+	//O(1)
 	public boolean isHardPassword(String password) {
 		boolean hardPassword = false;
 		if (password.length() >= 5 && checkIfPasswordContainDigits(password) && checkIfPasswordContainCharacter(password)) {
@@ -273,6 +286,7 @@ public class RealEstate {
 		}
 		return hardPassword;
 	}
+	//O(n)
 	public boolean itsAPhoneNumberWithOnlyDigits(String phoneNumber) {
 		boolean res = true;
 		String digit = "0123456789";
@@ -285,6 +299,7 @@ public class RealEstate {
 		}
 		return res;
 	}
+	//O(1)
 	public boolean isCorrectCellPhoneNumber(String phoneNumber) {
 		boolean correct = false;
 		if (phoneNumber.length() == LENGTH_PHONE
@@ -294,6 +309,7 @@ public class RealEstate {
 		}
 		return correct;
 	}
+	//O(n)
 	public boolean areYouBrokerUser(char ch) {
 		boolean isBroker = false;
 		boolean temp = false;
@@ -310,6 +326,7 @@ public class RealEstate {
 		}
 		return isBroker;
 	}
+	//O(n)
 	public boolean postNewProperty(User user) {
 		boolean res = true;
 		int count = user.getPropertyCount();
@@ -352,7 +369,7 @@ public class RealEstate {
 			System.out.println("Enter a city name from the list: ");
 			String nameOfStreet = s.next();
 			int counter2 = 0;
-			int index2= 0;
+			int index2 = 0;
 			for (int i = 0; i < cities[index].getStreets().length; i++) {
 				if (nameOfStreet.equalsIgnoreCase(String.valueOf(cities[index].getStreets()[i]))) {
 					index2 = i;
@@ -360,7 +377,7 @@ public class RealEstate {
 				}
 			}
 
-			if (counter2 == 1 ) {
+			if (counter2 == 1) {
 				propertyMenu();
 				System.out.println("Enter choice: ");
 				int choice = s.nextInt();
@@ -407,6 +424,7 @@ public class RealEstate {
 		}
 		return res;
 	}
+	//O(1)
 	public String typeForLand(int choice){
 		String typeForLand;
 		if (choice == 1){
@@ -418,18 +436,21 @@ public class RealEstate {
 		}
 		return typeForLand;
 	}
+	//O(n)
 	public void propertyMenu(){
 		System.out.println("What is the property type ---> ");
 		for (int i = 0; i < Property.TYPE_FOR_LAND.length; i++) {
 			System.out.println((i+1) + " - " + Property.TYPE_FOR_LAND[i]);
 		}
 	}
+	//O(1)
 	private boolean checkNumberValid(int choice){
 		if (choice >=1 && choice <= 3){
 			return true;
 		}
 		return false;
 	}
+	//O(n)
 	public void removeProperty(User user){
 		boolean res = true;
 		if (user.getPropertyCount() == 0){
@@ -467,25 +488,35 @@ public class RealEstate {
 			System.out.println("Properties deletion was successful.");
 		}
 	}
+	//O(n)
 	public void printAllProperties(){
-		System.out.println("All existing properties ---> ");
-		for (int i = 0; i < properties.length; i++) {
-			System.out.println((i+1) + " - " + properties[i].toString());
-		}
-	}
-	public void printProperties(User user){
-		System.out.println("Properties published by you ---> ");
-		int index = 1;
-		for (int i = 0; i < properties.length; i++) {
-			if (properties[i].getOwner().equals(user)){
-				System.out.println(index + " - " + properties[i].toString());
-				index++;
+		if (properties.length == 0){
+			System.out.println("You have not published any property yet. ");
+		}else {
+			System.out.println("All existing properties ---> ");
+			for (int i = 0; i < properties.length; i++) {
+				System.out.println((i + 1) + " - " + properties[i].toString());
 			}
 		}
 	}
+	//O(n)
+	public void printProperties(User user){
+		if (properties.length == 0){
+			System.out.println("You have not published any property yet. ");
+		}else {
+			System.out.println("Properties published by you ---> ");
+			int index = 1;
+			for (int i = 0; i < properties.length; i++) {
+				if (properties[i].getOwner().equals(user)) {
+					System.out.println(index + " - " + properties[i].toString());
+					index++;
+				}
+			}
+		}
+	}
+	//O(n)
 	public Property[] search(){
 		System.out.println("Answer the following questions: ");
-
 		System.out.println("Is it for rent/sale?(y/n) ");
 		boolean isRent = false;
 		String rentOrSale = s.next();
@@ -523,7 +554,6 @@ public class RealEstate {
 				indexForTemp++;
 			}
 		}
-
 		return temp;
 	}
 }
