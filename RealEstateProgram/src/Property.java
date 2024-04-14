@@ -1,15 +1,17 @@
 public class Property {
+	
 	private City city;
 	private Street street;
 	private int numberOfRooms;
 	private int price;
-	public static final String[] TYPE_FOR_LAND ={"Regular apartment", "Penthouse", "Private House" };
 	private String typeLand;
 	private boolean forRent;
 	private int houseNumber;
 	private int floorNumber;
 	private User owner;
 
+	public static final String[] TYPE_FOR_LAND ={"Regular apartment", "Penthouse", "Private House" };
+	
 	public Property(User owner,City city, Street street,int floorNumber,int numberOfRooms, int houseNumber, boolean forRent, int price, String typeLand){
 		this.owner = owner;
 		this.city = city;
