@@ -1,14 +1,15 @@
 public class City {
+
 	private String nameCity;
-	public final String[] district = {"Negev", "South", "Center","Sharon", "North"};
 	private Street[] streets = new Street[0];
+	
+	public final String[] district = {"Negev", "South", "Center","Sharon", "North"};
+
 	public City(String nameCity){
 		this.nameCity = nameCity;
 	}
-
-	public String getNameCity() {
-		return nameCity;
-	}
+	
+	//O(n)
 	public void addStreets(Street street){
 		Street[] temp = new Street[streets.length + 1];
 		for (int i = 0; i < streets.length; i++) {
@@ -16,6 +17,10 @@ public class City {
 		}
 		temp[streets.length] = street;
 		streets = temp;
+	}
+
+	public String getNameCity() {
+		return nameCity;
 	}
 
 	public Street[] getStreets() {
