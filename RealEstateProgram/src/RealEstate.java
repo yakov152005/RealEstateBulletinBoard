@@ -206,6 +206,7 @@ public class RealEstate {
 			password = s.next();
 			if (!isHardPassword(password)) {
 				System.out.println("You entered a weak password, please enter a strong password!");
+				System.out.println("The password must be at least 5 characters long, contain at least one digit and at least one of the following characters: $, % or _. ");
 			}
 		} while (!isHardPassword(password));
 
@@ -219,7 +220,7 @@ public class RealEstate {
 			}
 		} while (!isCorrectCellPhoneNumber(phoneNumber));
 
-		System.out.println("Are you a regular user? (Y/N) ");
+		System.out.println("Are you a broker user? (Y/N) ");
 		char ch = s.next().charAt(0);
 		boolean result = areYouBrokerUser(ch);
 
@@ -331,10 +332,10 @@ public class RealEstate {
 		boolean res = true;
 		int count = user.getPropertyCount();
 
-		if (user.isBroker() && count >= 2) { // אם המשתמש רגיל והגיע למגבלה של שני נכסים
+		if (!user.isBroker() && count >= 2) { // אם המשתמש רגיל והגיע למגבלה של שני נכסים
 			System.out.println("You have reached the maximum limit for publishing properties.");
 			res= false;
-		} else if (!user.isBroker() && count >= 5) { // אם המשתמש הוא מתווך והגיע למגבלה של חמישה נכסים
+		} else if (user.isBroker() && count >= 5) { // אם המשתמש הוא מתווך והגיע למגבלה של חמישה נכסים
 			System.out.println("You have reached the maximum limit for publishing properties.");
 			res = false;
 		}
@@ -403,14 +404,14 @@ public class RealEstate {
 						forRent = true;
 					}
 					System.out.println("What is the price for the property? ");
-					int priceForProperty = s.nextInt();
+					long priceForProperty = s.nextLong();
 
 					Property[] temp = new Property[properties.length + 1];
 					for (int i = 0; i < properties.length; i++) {
 						temp[i] = properties[i];
 					}
 
-					String typeForLand =typeForLand(choice);
+					String typeForLand = typeForLand(choice);
 
 					temp[properties.length] = new Property(user,this.cities[index],cities[index].getStreets()[index2],floor, rooms, propertyNumber, forRent, priceForProperty,typeForLand);
 					properties = temp;
@@ -451,51 +452,59 @@ public class RealEstate {
 		return false;
 	}
 	//O(n)
-	public void removeProperty(User user){
+	public void removeProperty(User user) {
 		boolean res = true;
-		if (user.getPropertyCount() == 0){
+		if (user.getPropertyCount() == 0) {
 			System.out.println("You have not published any property yet. ");
 			res = false;
 		}
-		if (res){
+		if (res) {
 			System.out.println("Your properties:");
+			Property[] temp = new Property[properties.length];
+			int index = 0;
 			for (int i = 0; i < properties.length; i++) {
-				if (properties[i].getOwner().equals(user)) {
-					System.out.println((i + 1) + " - " + this.properties[i].toString());
+				if (properties[i] != null && properties[i].getOwner().equals(user)) { // בדיקה שהנכס לא ריק ושהוא שייך למשתמש
+					System.out.println((index + 1) + " - " + this.properties[i].toString());
+					temp[index] = properties[i];
+					index++;
 				}
 			}
-			System.out.println("Which property do you want to remove? ");
+			System.out.println("Which property do you want to remove?  ");
 			int choice = s.nextInt();
 
-			if (choice < 1 || choice > properties.length) {
+			if (choice < 1 || choice > index) {
 				System.out.println("Invalid choice.");
 				return;
 			}
 
-			Property[] temp = new Property[properties.length - 1];
-			int index = 0;
-			for (int i = 0; i < properties.length; i++) {
-				if (!(properties[i].getOwner().equals(user))) {
-					temp[index] = properties[i];
-					index++;
-				}else if (i + 1 == choice) {
-					System.out.println("Removing property: " + properties[i].toString());
-					user.reducePropertyCount();// מקטין את ספירת הנכסים
+			Property[] newProperties = new Property[properties.length - 1];
+			int newIndex = 0;
+			for (int i = 0; i < index; i++) {
+				if (i + 1 != choice) {
+					newProperties[newIndex] = temp[i];
+					newIndex++;
+				} else {
+					System.out.println("Removing property: " + temp[i].toString());
+					user.reducePropertyCount(); // מקטין את ספירת הנכסים
 				}
-
 			}
-			properties = temp;
+			properties = newProperties;
 			System.out.println("Properties deletion was successful.");
 		}
 	}
 	//O(n)
-	public void printAllProperties(){
-		if (properties.length == 0){
-			System.out.println("You have not published any property yet. ");
-		}else {
-			System.out.println("All existing properties ---> ");
+	public void printAllProperties() {
+		boolean res = true;
+		if (properties.length == 0) {
+			System.out.println("No properties available.");
+			res = false;
+		}
+		if (res) {
+			System.out.println("All existing properties:");
 			for (int i = 0; i < properties.length; i++) {
-				System.out.println((i + 1) + " - " + properties[i].toString());
+				if (properties[i] != null) { // בדיקה שהנכס לא ריק
+					System.out.println((i + 1) + " - " + this.properties[i].toString());
+				}
 			}
 		}
 	}
@@ -507,7 +516,7 @@ public class RealEstate {
 			System.out.println("Properties published by you ---> ");
 			int index = 1;
 			for (int i = 0; i < properties.length; i++) {
-				if (properties[i].getOwner().equals(user)) {
+				if (properties[i] != null && properties[i].getOwner().equals(user)) {
 					System.out.println(index + " - " + properties[i].toString());
 					index++;
 				}
