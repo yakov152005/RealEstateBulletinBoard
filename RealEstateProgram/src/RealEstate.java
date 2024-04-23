@@ -455,44 +455,47 @@ public class RealEstate {
 	}
 	//O(n)
 	public void removeProperty(User user) {
-		boolean res = true;
+
 		if (user.getPropertyCount() == 0) {
-			System.out.println("You have not published any property yet. ");
-			res = false;
+			System.out.println("You have not published any property yet.");
+			return;
 		}
-		if (res) {
-			System.out.println("Your properties:");
-			Property[] temp = new Property[properties.length];
-			int index = 0;
-			for (int i = 0; i < properties.length; i++) {
-				if (properties[i] != null && properties[i].getOwner().equals(user)) { // בדיקה שהנכס לא ריק ושהוא שייך למשתמש
-					System.out.println((index + 1) + " - " + this.properties[i].toString());
-					temp[index] = properties[i];
-					index++;
-				}
-			}
-			System.out.println("Which property do you want to remove?  ");
-			int choice = s.nextInt();
 
-			if (choice < 1 || choice > index) {
-				System.out.println("Invalid choice.");
-				return;
+		System.out.println("Your properties:");
+		Property[] userProperties = new Property[properties.length];
+		int userPropertyIndex = 0;
+		for (int i = 0; i < properties.length; i++) {
+			if (properties[i] != null && properties[i].getOwner().equals(user)) { // בדיקה שהנכס לא ריק ושהוא שייך למשתמש
+				System.out.println((userPropertyIndex + 1) + " - " + properties[i].toString());
+				userProperties[userPropertyIndex++] = properties[i]; // ודא שנעשה שימוש ב-post-increment
 			}
-
-			Property[] newProperties = new Property[properties.length - 1];
-			int newIndex = 0;
-			for (int i = 0; i < index; i++) {
-				if (i + 1 != choice) {
-					newProperties[newIndex] = temp[i];
-					newIndex++;
-				} else {
-					System.out.println("Removing property: " + temp[i].toString());
-					user.reducePropertyCount(); // מקטין את ספירת הנכסים
-				}
-			}
-			properties = newProperties;
-			System.out.println("Properties deletion was successful.");
 		}
+
+		if (userPropertyIndex == 0) {
+			System.out.println("You do not have any properties to remove.");
+			return;
+		}
+
+		System.out.println("Which property do you want to remove?");
+		int choice = s.nextInt() - 1;
+		if (choice < 0 || choice >= userPropertyIndex) {
+			System.out.println("Invalid choice.");
+			return;
+		}
+
+		Property[] newProperties = new Property[properties.length - 1];
+		int newIndex = 0;
+		for (int i = 0; i < properties.length; i++) {
+			if (!properties[i].equals(userProperties[choice])) {
+				newProperties[newIndex++] = properties[i];
+			} else {
+				System.out.println("Removing property: " + properties[i].toString());
+				user.reducePropertyCount(); // מקטין את ספירת הנכסים
+			}
+		}
+
+		properties = newProperties;
+		System.out.println("Properties deletion was successful.");
 	}
 	//O(n)
 	public void printAllProperties() {
