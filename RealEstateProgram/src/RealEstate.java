@@ -42,7 +42,7 @@ public class RealEstate {
 				6 - Log out and return to the main menu\s""");
 	}
 	//O(n)
-	public RealEstate() {
+	public void setInitialBuildOnStart(){
 		properties = new Property[0];
 
 		cities = new City[]{
@@ -104,9 +104,11 @@ public class RealEstate {
 			cities[9].addStreets(streets[i]);
 		}
 
-
 		this.users = new User[0];
-
+	}
+	//O(n)
+	public RealEstate() {
+		setInitialBuildOnStart();
 		mainMenu();
 		while (true) {
 			int choice = s.nextInt();
