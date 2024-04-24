@@ -369,7 +369,7 @@ public class RealEstate {
 				res = false;
 			}
 
-			System.out.println("Enter a city name from the list: ");
+			System.out.println("Enter a street name from the list: ");
 			String nameOfStreet = s.next();
 			int counter2 = 0;
 			int index2 = 0;
@@ -515,7 +515,7 @@ public class RealEstate {
 	}
 	//O(n)
 	public void printProperties(User user){
-		if (properties.length == 0){
+		if (properties.length == 0 || user.getPropertyCount() == 0){
 			System.out.println("You have not published any property yet. ");
 		}else {
 			System.out.println("Properties published by you ---> ");
