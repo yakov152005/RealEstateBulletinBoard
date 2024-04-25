@@ -333,12 +333,15 @@ public class RealEstate {
 	public boolean postNewProperty(User user) {
 		boolean res = true;
 		int count = user.getPropertyCount();
+		int countProperty = 0;
 
 		if (!user.isBroker() && count >= 2) { // אם המשתמש רגיל והגיע למגבלה של שני נכסים
 			System.out.println("You have reached the maximum limit for publishing properties.");
+			countProperty++;
 			res= false;
 		} else if (user.isBroker() && count >= 5) { // אם המשתמש הוא מתווך והגיע למגבלה של חמישה נכסים
 			System.out.println("You have reached the maximum limit for publishing properties.");
+			countProperty++;
 			res = false;
 		}
 
@@ -347,6 +350,7 @@ public class RealEstate {
 			for (int i = 0; i < cities.length; i++) {
 				System.out.println(this.cities[i].getNameCity());
 			}
+
 			System.out.println("Enter a city name from the list: ");
 			String nameOfCity = s.next();
 
@@ -356,37 +360,45 @@ public class RealEstate {
 				if (nameOfCity.equalsIgnoreCase(cities[i].getNameCity())) {
 					index = i;
 					counter++;
+					res = true;
+					break;
+				}else {
+					res = false;
 				}
 			}
 
-			if (counter == 1) {
+
+			int counter2 = 0;
+			int index2 = 0;
+			if (counter == 1 ) {
 				System.out.println("List of streets in this city --->");
 				for (int i = 0; i < cities[index].getStreets().length; i++) {
 					System.out.println(cities[index].getStreets()[i]);
 				}
-			} else {
-				System.out.println("The name typed is not in the list.");
-				res = false;
-			}
 
-			System.out.println("Enter a street name from the list: ");
-			String nameOfStreet = s.next();
-			int counter2 = 0;
-			int index2 = 0;
-			for (int i = 0; i < cities[index].getStreets().length; i++) {
-				if (nameOfStreet.equalsIgnoreCase(String.valueOf(cities[index].getStreets()[i]))) {
-					index2 = i;
-					counter2++;
+				System.out.println("Enter a street name from the list: ");
+				String nameOfStreet = s.next();
+
+				for (int i = 0; i < cities[index].getStreets().length; i++) {
+					if (nameOfStreet.equalsIgnoreCase(String.valueOf(cities[index].getStreets()[i]))) {
+						index2 = i;
+						counter2++;
+						res = true;
+						break;
+					}else {
+						res = false;
+					}
 				}
 			}
 
-			if (counter2 == 1) {
+			if (counter2 == 1 ) {
 				propertyMenu();
 				System.out.println("Enter choice: ");
 				int choice = s.nextInt();
 				boolean checkNumberValid = checkNumberValid(choice);
 				if (!checkNumberValid) {
 					System.out.println("You entered an incorrect number.");
+					countProperty++;
 					res = false;
 				} else {
 					int floor = 0;
@@ -418,13 +430,15 @@ public class RealEstate {
 					temp[properties.length] = new Property(user,this.cities[index],cities[index].getStreets()[index2],floor, rooms, propertyNumber, forRent, priceForProperty,typeForLand);
 					properties = temp;
 					user.incrementPropertyCount(); // עדכון מספר הנכסים שפורסמו על ידי המשתמש
-					res = true;
 				}
 			} else {
-				System.out.println("The name typed is not in the list.");
 				res = false;
 			}
 		}
+		if (!res && countProperty == 0){
+			System.out.println("The name typed is not in the list.");
+		}
+
 		return res;
 	}
 	//O(1)
