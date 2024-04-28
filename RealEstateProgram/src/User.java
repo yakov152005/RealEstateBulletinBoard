@@ -1,6 +1,5 @@
 import java.util.Scanner;
 public class User {
-
 	private String username;
 	private String password;
 	private String phoneNumber;
@@ -15,7 +14,7 @@ public class User {
 		this.phoneNumber = phoneNumber;
 		this.isBroker = isBroker;
 	}
-	
+
 	//O(1)
 	public boolean isBroker() {
 		return isBroker;
@@ -32,9 +31,6 @@ public class User {
 		}
 		return success;
 	}
-	public void setBroker(boolean broker) {
-		isBroker = broker;
-	}
 	public void incrementPropertyCount() {
 		propertyCount++; // עדכון מספר הנכסים שפורסמו על ידי המשתמש
 	}
@@ -46,12 +42,6 @@ public class User {
 	}
 	public String getUsername() {
 		return username;
-	}
-	public String getPassword(){
-		return password;
-	}
-	public String getPhoneNumber(){
-		return phoneNumber;
 	}
 
 	public String toString(){
