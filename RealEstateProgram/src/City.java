@@ -2,6 +2,8 @@ public class City {
 	private String nameCity;
 	private Street[] streets = new Street[0];
 
+	public static final String[] citiesList = {"Tel-Aviv","Holon","Ashkelon","Eilat","Tiberias","Kiryat-Shmona",
+			"Beer-Sheva","Ashdod","Be'er-Ya'akov","Ramat-Gan" };
 	public final String[] district = {"Negev", "South", "Center","Sharon", "North"};
 
 	public City(String nameCity){
