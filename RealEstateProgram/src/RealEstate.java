@@ -35,7 +35,7 @@ public class RealEstate {
 		System.out.println("""
 				|Are you interested|-->
 				1 - publish a new property
-				2 - remove advertising on a property
+				2 - remove a property from listing
 				3 - display all assets in the system
 				4 - Show all properties published by the user
 				5 - Search for a property by parameters
@@ -46,16 +46,16 @@ public class RealEstate {
 		properties = new Property[0];
 
 		cities = new City[]{
-				new City("Tel-Aviv"),
-				new City("Holon"),
-				new City("Ashkelon"),
-				new City("Eilat"),
-				new City("Tiberias"),
-				new City("Kiryat-Shmona"),
-				new City("Beer-Sheva"),
-				new City("Ashdod"),
-				new City("Be'er-Ya'akov"),
-				new City("Ramat-Gan")
+				new City(City.citiesList[0]),
+				new City(City.citiesList[1]),
+				new City(City.citiesList[2]),
+				new City(City.citiesList[3]),
+				new City(City.citiesList[4]),
+				new City(City.citiesList[5]),
+				new City(City.citiesList[6]),
+				new City(City.citiesList[7]),
+				new City(City.citiesList[8]),
+				new City(City.citiesList[9])
 		};
 		Street[] streets ={
 				new Street(Street.streetsList[0]),
@@ -192,7 +192,7 @@ public class RealEstate {
 	}
 	//O(n)
 	private User signUp() {
-		String username = null;
+		String username;
 		do {
 			System.out.println("Enter a username: ");
 			username = s.next();
@@ -202,7 +202,7 @@ public class RealEstate {
 		} while (!isAvailableUserName(username));
 
 		s.nextLine();
-		String password = null;
+		String password;
 		do {
 			System.out.println("Enter a password: ");
 			password = s.next();
@@ -213,12 +213,13 @@ public class RealEstate {
 		} while (!isHardPassword(password));
 
 		s.nextLine();
-		String phoneNumber = null;
+		String phoneNumber;
 		do {
 			System.out.println("Enter a phone number: ");
 			phoneNumber = s.next();
 			if (!isCorrectCellPhoneNumber(phoneNumber)) {
 				System.out.println("You entered an invalid cell phone number, please enter a valid cell phone number!");
+				System.out.println("we accept only '05' phone numbers, totaling 10 digits. ");
 			}
 		} while (!isCorrectCellPhoneNumber(phoneNumber));
 
@@ -562,9 +563,11 @@ public class RealEstate {
 		System.out.println("What is the desired number of rooms? (Enter -999 for any number)");
 		int numberRoom = s.nextInt();
 
-		System.out.println("What is the desired price range (minimum and maximum)? (Enter -999 for any range)");
-		int min = s.nextInt();
-		int max = s.nextInt();
+		System.out.println("What is the desired price range ? (Enter -999 for any range) --->");
+		System.out.print("Min: ");
+		long min = s.nextLong();
+		System.out.print("Max: ");
+		long max = s.nextLong();
 
 		int countForPropertiesArr = 0;
 		for (int i = 0; i < properties.length; i++) {
