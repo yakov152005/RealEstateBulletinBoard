@@ -25,11 +25,7 @@ public class User {
 	}
 	//O(1)
 	public boolean checkCredentials (String username, String password) {
-		boolean success = false;
-		if (this.username.equals(username) && this.password.equals(password)) {
-			success = true;
-		}
-		return success;
+		return isUserNameEquals(username) && this.password.equals(password);
 	}
 	public void incrementPropertyCount() {
 		propertyCount++; // עדכון מספר הנכסים שפורסמו על ידי המשתמש
