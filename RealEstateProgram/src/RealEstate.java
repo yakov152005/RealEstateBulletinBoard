@@ -158,7 +158,7 @@ public class RealEstate {
 									} else {
 										System.out.println("Properties found: ");
 										for (int i = 0; i < searchResult.length; i++) {
-											System.out.println(searchResult[i].toString());
+											System.out.println((i + 1 ) + ": " + searchResult[i].toString());
 										}
 									}
 									break;
@@ -411,10 +411,10 @@ public class RealEstate {
 					int rooms = s.nextInt();
 					System.out.println("What is the property number? ");
 					int propertyNumber = s.nextInt();
-					System.out.println("Is the property for rent/sale? (Y/N) ");
+					System.out.println("Is the property for rent/sale? (r/s) ");
 					char c = s.next().charAt(0);
 					boolean forRent = false;
-					if (c == 'y' || c == 'Y') {
+					if (c == 'r' || c == 'R') {
 						forRent = true;
 					}
 					System.out.println("What is the price for the property? ");
@@ -543,31 +543,35 @@ public class RealEstate {
 		}
 	}
 	//O(n)
-	public Property[] search(){
+	public Property[] search() {
 		System.out.println("Answer the following questions: ");
-		System.out.println("Is it for rent/sale?(y/n) ");
+		System.out.println("Is it for rent/sale? (Enter r for rent, s for sale, -999 for any) ");
 		boolean isRent = false;
 		String rentOrSale = s.next();
-		if (rentOrSale.equalsIgnoreCase("y")){
+		if (rentOrSale.equalsIgnoreCase("r") || rentOrSale.equals("-999")) {
 			isRent = true;
+		} else if (!rentOrSale.equalsIgnoreCase("s")) {
+			System.out.println("Invalid input. Defaulting to sale.");
 		}
-		System.out.println("What type of property do you want? ");
+
+		System.out.println("What type of property do you want? (Enter 999- for all types)");
 		propertyMenu();
 		int choice = s.nextInt();
-		String typeForLand = typeForLand(choice);
+		String typeForLand = (choice == -999) ? "" : typeForLand(choice);
 
-		System.out.println("What is the desired number of rooms? ");
+		System.out.println("What is the desired number of rooms? (Enter -999 for any number)");
 		int numberRoom = s.nextInt();
 
-		System.out.println("What is the desired price range (minimum and maximum)?" );
+		System.out.println("What is the desired price range (minimum and maximum)? (Enter -999 for any range)");
 		int min = s.nextInt();
 		int max = s.nextInt();
 
 		int countForPropertiesArr = 0;
 		for (int i = 0; i < properties.length; i++) {
-			if (properties[i].isForRent() == isRent && properties[i].getTypeLand().equals(typeForLand) &&
-					properties[i].getNumberOfRooms() == numberRoom &&
-					properties[i].getPrice() >= min && properties[i].getPrice() <= max){
+			if ((isRent == properties[i].isForRent() || rentOrSale.equals("-999")) &&
+					(typeForLand.isEmpty() || properties[i].getTypeLand().equals(typeForLand)) &&
+					(numberRoom == properties[i].getNumberOfRooms() || numberRoom == -999) &&
+					((min == -999 || properties[i].getPrice() >= min) && (max == -999 || properties[i].getPrice() <= max))) {
 				countForPropertiesArr++;
 			}
 		}
@@ -575,9 +579,10 @@ public class RealEstate {
 		Property[] temp = new Property[countForPropertiesArr];
 		int indexForTemp = 0;
 		for (int i = 0; i < properties.length; i++) {
-			if (properties[i].isForRent() == isRent && properties[i].getTypeLand().equals(typeForLand) &&
-					properties[i].getNumberOfRooms() == numberRoom &&
-					properties[i].getPrice() >= min && properties[i].getPrice() <= max){
+			if ((isRent == properties[i].isForRent() || rentOrSale.equals("-999")) &&
+					(typeForLand.isEmpty() || properties[i].getTypeLand().equals(typeForLand)) &&
+					(numberRoom == properties[i].getNumberOfRooms() || numberRoom == -999) &&
+					((min == -999 || properties[i].getPrice() >= min) && (max == -999 || properties[i].getPrice() <= max))) {
 				temp[indexForTemp] = properties[i];
 				indexForTemp++;
 			}
